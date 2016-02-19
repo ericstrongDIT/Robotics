@@ -1,1 +1,2 @@
-This is the read me for lab 3
+All components of lab 3 were complete. 
+view lab log book for more details
