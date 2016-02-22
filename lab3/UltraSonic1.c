@@ -1,4 +1,4 @@
-/**This is the comment test*/
+/**This is the comment tes*/
 #pragma config(Sensor, S4,     sonarSensor,         sensorSONAR)
 task main()
 {
