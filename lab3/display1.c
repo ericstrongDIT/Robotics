@@ -16,5 +16,7 @@ int b = 50;
 		displayTextLine(4, "Power%d Battery%d",a,b);
 		wait1Msec(10000);
 
-	}
+		int speedLeft = motor[motorB];
+		displayTextLine(4, "speed is %d",speedLeft);
 
+	}
