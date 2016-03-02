@@ -1,3 +1,4 @@
+//Lab03
 #pragma config(Sensor,S1,touchSensor,sensorTouch)
 //const tSensors touchSensor = (tSensors) S1; //impoting the touch sensor and naming it and assigning to pot S1
 
