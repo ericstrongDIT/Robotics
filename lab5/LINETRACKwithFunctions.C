@@ -12,7 +12,16 @@ this program is run by this principal
 
 NOTE IF THE ROBOT JUST SPINS IN A CIRCLE YOU GOTTA CONFIGURE THE
 THRESHOLD.
-*/
+
+/*implementing the dark fucntion*/
+void stop1(int motorStop)
+{
+  	// this runs forward and left while seeing dark
+			motor[motorC] = motorStop; 		//right
+			motor[motorB] = motorStop; 	  //left
+}//end stop1
+
+
 
 /*implementing the dark fucntion*/
 void dark(int go, int motorStop)
@@ -52,9 +61,6 @@ task main()
 
 	}//end while
 
-	motor[motorC] = 0; 		//right
-	motor[motorB] = 0; 		//left
-}//end main
+	  stop1(motorStop);
 
-
-
+}//end main()

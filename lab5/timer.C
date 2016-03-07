@@ -28,16 +28,26 @@ void bright(int go, int motorStop)
   	// this runs forward and right while seeing bright
 			motor[motorC] = go; 		      //right
 			motor[motorB] = motorStop; 	  //left
-}//end dark
+}//end brigh
+
+void stop1(int motorStop)
+{
+  	// this runs forward and left while seeing dark
+			motor[motorC] = motorStop; 		//right
+			motor[motorB] = motorStop; 	  //left
+}//end stop1
+
 
 task main()
 {
+  ClearTimer(T1);  //declaring the timer
+
   int go = 80;
   int motorStop = 0;
 	int threshold; // calibrate this
 	//int flag = 0;
 
-	while(SensorValue (touchSensor) == 0) // follows a line until touch sensor is touched
+	while(time1[T1] < 3000) // while the t1 is less than 3000 seconds do whats in the loop. timer runs down
 	{
 
 		if(SensorValue(lightSensor) < threshold)
@@ -51,10 +61,6 @@ task main()
 		}//end else
 
 	}//end while
+stop1(motorStop);
 
-	motor[motorC] = 0; 		//right
-	motor[motorB] = 0; 		//left
 }//end main
-
-
-

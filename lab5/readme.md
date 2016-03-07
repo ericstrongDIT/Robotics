@@ -19,3 +19,5 @@ it meets a black line
 enjoy man, hope these programs work. if not we can fly through them together next week. 
 
 take it easy man. 
+
+>> I have also added in some functions, timers and sound sensors

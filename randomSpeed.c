@@ -1,4 +1,4 @@
-#pragma DebuggerWindows("nxtLCDScreen")
+
 task main()
 {
 	int speedLeft = (random(100));
@@ -21,4 +21,3 @@ task main()
 
 
 }
-
