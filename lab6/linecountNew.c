@@ -1,8 +1,7 @@
 #pragma config(Sensor, S1,     touchSensor,    sensorTouch)
 #pragma config(Sensor, S2,     lightSensor,    sensorLightActive)
-/*Line counting Program
-remember when to count
-when not to count
+
+/*Program to measure Distance and Speed and display this while following a line. If an obstacle occurs then it exits the count
 */
 
 #define SPEED 30
