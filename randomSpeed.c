@@ -12,7 +12,8 @@ task main()
 							wait1Msec(100);
 		}//end display
 
-	nSyncedMotors= synchBC;
+		nSyncedMotors= synchBC;
+	//nSyncedMotors= synchBC;
 	nSyncedTurnRatio= 100;
 
 	motor[motorB] = (random(100));

@@ -1,5 +1,5 @@
-#pragma config(Sensor, S1,     lightSensor,    sensorLightActive)
-#pragma config(Sensor, S2,     touchSensor,    sensorTouch)
+#pragma config(Sensor, S2,     lightSensor,    sensorLightActive)
+#pragma config(Sensor, S1,     touchSensor,    sensorTouch)
 
 /*Line following using light Sensor (within Functions)and if touch sensor is touched stop the robot
 Remember to set your threshold first and save to a variable.(dark + light / 2)[this is in the range of 0-100]
@@ -55,6 +55,3 @@ task main()
 	motor[motorC] = 0; 		//right
 	motor[motorB] = 0; 		//left
 }//end main
-
-
-

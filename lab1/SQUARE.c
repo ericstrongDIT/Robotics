@@ -4,6 +4,7 @@ task main()
 
 	int i=0;// counter for for loop
 	int k=0;// counter for while loop
+setLEDColor(LEDpatterns);
 
 	while(k==0)
 	{

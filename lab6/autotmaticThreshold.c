@@ -1,5 +1,6 @@
-#pragma config(Sensor, S1,     lightSensor,    sensorLightActive)
-#pragma config(Sensor, S2,     touchSensor,    sensorTouch)
+#pragma config(Sensor, S2,     lightSensor,    sensorLightActive)
+#pragma config(Sensor, S1,     touchSensor,    sensorTouch)
+
 
 
 /*Using automatic Thresholds*/

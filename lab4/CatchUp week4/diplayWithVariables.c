@@ -8,15 +8,15 @@ task main()
 
 
 
-	nSyncedMotors= synchBC;
-	nSyncedTurnRatio= 100;
+	//nSyncedMotors= synchBC;
+	//nSyncedTurnRatio= 100;
 
 	motor[motorB] = speedLeft;
 	wait1Msec (5000);//goes straight 26"
 
 	{
 
-							displayTextLine(4, "speed is %d",speedLeft);
+							displayTextLine(4, "Hello MA",speedLeft);
 							wait1Msec(5000);
 		}//end display
 

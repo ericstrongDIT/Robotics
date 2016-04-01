@@ -14,6 +14,7 @@ int thresHold(int threshold)
  while(SensorValue(touchSensor) == 0)
  {
    nxtDisplayBigTextLine(3, "read light value");
+   //nxtDisplayBigTextLine(3, "read light value");
  }//end while
 
  //reading light value

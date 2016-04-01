@@ -5,7 +5,7 @@ task main()
 	while(i == 0)
 	{
 		nSyncedMotors = synchBC;
-		nSyncedTurnRatio = -100;
+		nSyncedTurnRatio = 10;
 
 		motor[motorB] = 50;
 		wait1Msec(4000);
