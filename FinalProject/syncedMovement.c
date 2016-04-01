@@ -1,0 +1,13 @@
+
+task main()
+{
+	nSyncedMotors = synchBC;
+
+
+
+
+
+
+
+
+}
