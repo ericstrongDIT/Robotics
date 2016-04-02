@@ -1,5 +1,21 @@
 /*The Following program is the Labrynth challenge with a random function to pick wheter it goes to Point 2 or point B.*/
 
+void white()
+{
+	setSoundVolume(100);
+	playSoundFile("White");
+	sleep(1000);
+
+}
+
+void black()
+{
+	setSoundVolume(100);
+	playSoundFile("Black");
+	sleep(1000);
+
+}
+
 task main()
 {
 	nMotorPIDSpeedCtrl[motorC]= mtrSpeedReg; // left motor set to PID
@@ -10,6 +26,7 @@ task main()
 	if(rand == 0)
 
 	{
+		white();
 	nMotorPIDSpeedCtrl[motorC]= mtrSpeedReg; // left motor set to PID
 	nMotorPIDSpeedCtrl[motorB]= mtrSpeedReg;
 
@@ -54,6 +71,7 @@ task main()
 	}//en if
 	else
 	{
+		black();
 	nMotorPIDSpeedCtrl[motorC]= mtrSpeedReg; // left motor set to PID
 	nMotorPIDSpeedCtrl[motorB]= mtrSpeedReg;
 
