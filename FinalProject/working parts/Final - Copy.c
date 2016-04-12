@@ -6,14 +6,42 @@
 //The format for the sensors. Keep note of the numbering
 
 //REMEMBER CHANGE THE VALUE OF TIME TO SUIT THE SIZE OF THE GRID. 1sec = 1box may need to be adjusted
-#define POWER1 100
+#define POWER1 40
 #define ROWS 9
 #define COLS 7
 
 //global variables used to as timers per box
-int move9 = 9000; //moves for 9 seconds
+int mapGrid[ROWS][COLS];
+int move9 =25000; //moves for 9 seconds
 int move3 = 3000; // moves for 3 seconds
 int move1 = 900; // moves for 1 second
+string fileName = "GRIDMAPPING1";
+
+int writeFile(int value, int mapGrid)
+{
+	long filehandle;
+	string B = "1";
+	string W = "0";
+	string SPACE = " ";
+
+if(value == 1)
+{
+	int strlen1 = strlen(B); // do the same for all rows, (line 1-7)
+	filehandle = fileOpenWrite(fileName);
+	fileWriteData(filehandle,B,strlen1);
+	fileWriteData(filehandle,SPACE,strlen1);
+}//end if 1
+
+if(value == 0)
+{
+	int strlen1 = strlen(W); // do the same for all rows, (line 1-7)
+	filehandle = fileOpenWrite(fileName);
+	fileWriteData(filehandle,W,strlen1);
+	fileWriteData(filehandle,SPACE,strlen1);
+}
+//fileClose(filehandle);
+	return 0;
+}//end writeFile()
 
 /*The following are Sound Files to distinguish what colour the box is and other prompts*/
 void cheering()
@@ -50,20 +78,29 @@ void black()
 
 //This function scans the box, prompts a sound a writes to a file
 //Fwrite the display of row col to a file along with the details of the box color
-void scanBox(int threshold)
+void scanBox(int threshold, int r, int c)
 {
-	if(SensorValue(lightSensor) < threshold)
+	int black1=1;
+	int white0=0;
+
+	if(SensorValue(lightSensor) < threshold) //value will get a 1
 	{
 		black();
 		//write to file Logic here. Place its array reference and X
+		//writeFile(black1);
+		mapGrid[r][c]=1;
 
 	}//end while
 	else
 	{
 		white();
 		//write to file logic here. Place its array reference and O
-
+		//writeFile(white0);
+		mapGrid[r][c]=0;
 	}//end else
+
+	//Enter some logic to pass the array to writeFile function and write to file
+	//writeFile(mapGrid1);
 
 }//end scanBox
 
@@ -108,21 +145,32 @@ int oddTurn(int turn,int row, int threshold)
   while(time1[T1] <= move9)
   {
   	displayBigTextLine(3, "row %d \nCol%d",row,col);
+
 	  // setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
+		mapGrid[row][col]=0;
 		detect(); // sound file
 		wait1Msec(1000);
 		col --;
 
 		//scan box color to file
-		scanBox(threshold);
+		scanBox(threshold,row,col);
 
 	}//end while
 	wait1Msec(1000);
 
+		//THE EXTRA ONE FORWARD!!!!
+	clearTimer(T1);
+  while(time1[T1] <= move1)
+  {
+  displayBigTextLine(3, "row %d \nCol%d",row,col);
+	setMotorSyncTime(left, right, 0, 1000, POWER1);
+
+	}//end while
+
 	// turns the robot left for over half a second. This makes it go left (all power to right)
 	setMotorSyncTime(left, right, turn, 1000, 50);
-	wait1Msec(590);
+	wait1Msec(500);
 
 	//straight forward for 1 seconds
 	clearTimer(T1);
@@ -135,7 +183,7 @@ int oddTurn(int turn,int row, int threshold)
 	}//end while
 	//turn left
 		setMotorSyncTime(left, right, -100, 1000, 50);
-		wait1Msec(590);
+		wait1Msec(500);
 		return (row);
 
 }//end oddTrav()
@@ -151,19 +199,30 @@ int evenTurn(int turn,int row,int threshold)
   	displayBigTextLine(3, "row%d ,Col%d",row,col);
 	  // setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
+		mapGrid[row][col]=0;
 		detect();
 		wait1Msec(1000);
 		col++;
 
 		//scan box color to file
-		scanBox(threshold);
+		scanBox(threshold,row,col);
 
 	}//end while
 	wait1Msec(1000);
 
+	//THE EXTRA ONE FORWARD!!!!
+
+	clearTimer(T1);
+  while(time1[T1] <= move1)
+  {
+  displayBigTextLine(3, "row %d \nCol%d",row,col);
+	setMotorSyncTime(left, right, 0, 1000, POWER1);
+
+	}//end while
+
 	// turns the robot left for over half a second. This makes it go left (all power to right)
 	setMotorSyncTime(left, right, turn, 1000, 50);
-	wait1Msec(590);
+	wait1Msec(500);
 
 	//straight forward for 1 seconds
 	clearTimer(T1);
@@ -176,7 +235,7 @@ int evenTurn(int turn,int row,int threshold)
 	}//end while
 	//turn left
 		setMotorSyncTime(left, right, turn, 1000, 50);
-		wait1Msec(590);
+		wait1Msec(500);
 		return (row);
 }//end evenTrav()
 
@@ -227,8 +286,6 @@ void xspot(int turn, int flag)
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
 		wait1Msec(1000);
 
-		//scan box color to file logic here
-
 	}//end while
 	wait1Msec(1000);
 	// a flag is used from the main to determine what the logic does
@@ -243,8 +300,6 @@ void xspot(int turn, int flag)
   while(time1[T1] <= move3)
   {
 	setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-	//scan box color to file logic here
 
 	}//end while
 
@@ -274,7 +329,6 @@ else
 
 }//end else
 
-
 }//end xspot()
 
 task main()
@@ -285,6 +339,7 @@ task main()
 	int lines = 1;	//line count, starting at 1
 	int value = 0;	//value is used for the threshold
   int threshold=0; // stores the threshold returned from the function
+  int i,j;
 
   //get threshold from function
   threshold = thresHold(value);
@@ -292,15 +347,21 @@ task main()
 
 	//xspot
   activate(); // says activate when going to xspot
-	xspot(left, flag);
+
+  //This will need to be adjusted for 4 different grids. <CRAIG>
+	//xspot(left, flag);
 
 	//traverse function
 	traverse(lines,threshold);
 
-	//xspot return
+	//writeFile();
+
+	//xspot return. This will change to whatever map(1-4)
 	wait1Msec(2000);
 	flag = 1;
 	xspot(right,flag);
+
+
 
 	//Logic for locating object here
 	//function
@@ -308,6 +369,21 @@ task main()
 	//Ram object logic here
 	//function
 
+
+
+	//display Grid on LCD
+	  for(i=0;i<ROWS;i++)
+    {
+        for(j=0;j<COLS;j++)
+        {
+        		displayBigTextLine(1,"%d",mapGrid[i][j]);
+
+        }//end inner for
+       displayBigTextLine(1,"\n");
+    }//end outter for
+
 	//Lab complete!
 	cheering();
+
+
 }//end main
