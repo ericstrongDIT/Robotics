@@ -7,40 +7,73 @@
 
 //REMEMBER CHANGE THE VALUE OF TIME TO SUIT THE SIZE OF THE GRID. 1sec = 1box may need to be adjusted
 #define POWER1 40
-#define ROWS 9
-#define COLS 7
+#define POWER2 80
+#define ROWS 7
+#define COLS 9
 
-//global variables used to as timers per box
-int mapGrid[ROWS][COLS];
-int move9 =25000; //moves for 9 seconds
+//global variables
+
+int mapGrid[ROWS][COLS]={0,0,0,0,0,0,0,0,0,
+												0,0,0,0,0,0,0,0,0,
+												0,0,0,0,0,0,0,0,0,
+												0,0,0,0,0,0,0,0,0,
+												0,0,0,0,0,0,0,0,0,
+												0,0,0,0,0,0,0,0,0,
+												0,0,0,0,0,0,0,0,0};
+
+int boxTotal=0;
+int blackTotal=0;
+int whiteTotal=0;
+int move9 =25000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
+int move06 = 16600;
+int move03= 8300;
+int move04 = 11100;
 int move3 = 3000; // moves for 3 seconds
+int move02 = 5550;
 int move1 = 900; // moves for 1 second
-string fileName = "GRIDMAPPING1";
 
-int writeFile(int value, int mapGrid)
+
+int *ptr = mapGrid;
+
+//write to file function
+void writeFile(int *ptr)
 {
+
+	string fileName = "GRIDMAPPING1";
 	long filehandle;
-	string B = "1";
-	string W = "0";
-	string SPACE = " ";
+	string info="White ,";
+	string newLine = "\n";
+	int strlen1 = strlen(newLine); // do the same for all rows, (line 1-7)
+	int strlen2 = strlen(info);
+	int i,j;
 
-if(value == 1)
-{
-	int strlen1 = strlen(B); // do the same for all rows, (line 1-7)
+	char *white = "0 ,";
+	char *black = "1 ,";
+	char *spac = "\n";
 	filehandle = fileOpenWrite(fileName);
-	fileWriteData(filehandle,B,strlen1);
-	fileWriteData(filehandle,SPACE,strlen1);
-}//end if 1
 
-if(value == 0)
-{
-	int strlen1 = strlen(W); // do the same for all rows, (line 1-7)
-	filehandle = fileOpenWrite(fileName);
-	fileWriteData(filehandle,W,strlen1);
-	fileWriteData(filehandle,SPACE,strlen1);
-}
-//fileClose(filehandle);
-	return 0;
+	for (i = 0; i <  ROWS; i++)
+	{
+		for (j = 0; j < COLS; j++)
+		{
+			if(mapGrid[i][j]==0)
+			{
+				fileWriteData(filehandle,white,strlen2);
+			}//end if white
+			if(mapGrid[i][j]==1)
+			{
+				fileWriteData(filehandle,black,strlen2);
+			}//end if black
+				//fileWriteData(filehandle,spac,strlen1);
+
+		}//end inner for
+
+	}//end outter for
+
+	//wrinting the project requirments to the file
+	//fileWriteData(filehandle,black,strlen2);
+
+fileClose(filehandle);
 }//end writeFile()
 
 /*The following are Sound Files to distinguish what colour the box is and other prompts*/
@@ -66,6 +99,7 @@ void white()
 {
 	setSoundVolume(100);
 	playSoundFile("White");
+	whiteTotal++;
 	sleep(1000);
 }//end white()
 
@@ -73,6 +107,7 @@ void black()
 {
 	setSoundVolume(100);
 	playSoundFile("Black");
+	blackTotal ++;
 	sleep(1000);
 }//end black()
 
@@ -80,27 +115,20 @@ void black()
 //Fwrite the display of row col to a file along with the details of the box color
 void scanBox(int threshold, int r, int c)
 {
-	int black1=1;
-	int white0=0;
-
 	if(SensorValue(lightSensor) < threshold) //value will get a 1
 	{
 		black();
-		//write to file Logic here. Place its array reference and X
-		//writeFile(black1);
+		//write to file Logic here. Place its array reference and 1
+
 		mapGrid[r][c]=1;
 
-	}//end while
-	else
+	}//end if
+	else if(SensorValue(lightSensor) > threshold)
 	{
 		white();
-		//write to file logic here. Place its array reference and O
-		//writeFile(white0);
 		mapGrid[r][c]=0;
-	}//end else
 
-	//Enter some logic to pass the array to writeFile function and write to file
-	//writeFile(mapGrid1);
+	}//end else
 
 }//end scanBox
 
@@ -140,20 +168,27 @@ int thresHold(int threshold)
 //oddTrav() is based on the odd numbered Rows. and does a specific behaviour of turns
 int oddTurn(int turn,int row, int threshold)
 {
-	int col=8; // starts at 8 on Odd as the robot traverses backwards on odd lines
+
+	int col=9; // starts at 8 on Odd as the robot traverses backwards on odd lines
+	int r,c;
+	r=row+1;
+	c=col;
+
 	clearTimer(T1);
   while(time1[T1] <= move9)
   {
-  	displayBigTextLine(3, "row %d \nCol%d",row,col);
+  	displayBigTextLine(3, "row %d \nCol%d",r,c);
 
 	  // setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
-		mapGrid[row][col]=0;
+		//mapGrid[row][col]=0;
 		detect(); // sound file
+		boxTotal ++;
 		wait1Msec(1000);
+		c--;
 		col --;
 
-		//scan box color to file
+		//scan box color
 		scanBox(threshold,row,col);
 
 	}//end while
@@ -163,27 +198,35 @@ int oddTurn(int turn,int row, int threshold)
 	clearTimer(T1);
   while(time1[T1] <= move1)
   {
-  displayBigTextLine(3, "row %d \nCol%d",row,col);
+  //displayBigTextLine(3, "row %d \nCol%d",row,col);
 	setMotorSyncTime(left, right, 0, 1000, POWER1);
 
 	}//end while
 
 	// turns the robot left for over half a second. This makes it go left (all power to right)
 	setMotorSyncTime(left, right, turn, 1000, 50);
-	wait1Msec(500);
+	wait1Msec(550);
 
 	//straight forward for 1 seconds
 	clearTimer(T1);
   while(time1[T1] <= move1)
   {
-  displayBigTextLine(3, "row %d \nCol%d",row,col);
+  //displayBigTextLine(3, "row %d \nCol%d",row,col);
 	setMotorSyncTime(left, right, 0, 1000, POWER1);
+	r++;
 	row++; // increments a row at each row change
 
 	}//end while
+	displayBigTextLine(3, "Total Boxes %d",boxTotal);
+
+  displayBigTextLine(3, "white Boxes %d",whiteTotal);
+
+  displayBigTextLine(3, "Black Boxes %d",blackTotal);
+
+
 	//turn left
 		setMotorSyncTime(left, right, -100, 1000, 50);
-		wait1Msec(500);
+		wait1Msec(550);
 		return (row);
 
 }//end oddTrav()
@@ -191,51 +234,58 @@ int oddTurn(int turn,int row, int threshold)
 //evenTrav()
 int evenTurn(int turn,int row,int threshold)
 {
-	int col=0; // This count starts at 0 as on even lines the robot reads from right to left
+	int col=-1; // This count starts at 0 as on even lines the robot reads from right to left
 
 	clearTimer(T1);
+	int r,c;
+	r=row+1;
+	c=col +2;
   while(time1[T1] <= move9)
   {
-  	displayBigTextLine(3, "row%d ,Col%d",row,col);
+  	displayBigTextLine(3, "row%d ,Col%d",r,c);
 	  // setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
-		mapGrid[row][col]=0;
 		detect();
+		boxTotal ++;
 		wait1Msec(1000);
+		c++;
 		col++;
 
-		//scan box color to file
+		//scan box color
 		scanBox(threshold,row,col);
 
 	}//end while
 	wait1Msec(1000);
 
 	//THE EXTRA ONE FORWARD!!!!
-
 	clearTimer(T1);
   while(time1[T1] <= move1)
   {
-  displayBigTextLine(3, "row %d \nCol%d",row,col);
+ // displayBigTextLine(3, "row %d \nCol%d",row,col);
 	setMotorSyncTime(left, right, 0, 1000, POWER1);
 
 	}//end while
 
 	// turns the robot left for over half a second. This makes it go left (all power to right)
 	setMotorSyncTime(left, right, turn, 1000, 50);
-	wait1Msec(500);
+	wait1Msec(550);
 
 	//straight forward for 1 seconds
 	clearTimer(T1);
   while(time1[T1] <= move1)
   {
-  displayBigTextLine(3, "row %d \nCol%d",row,col);
+  //displayBigTextLine(3, "row %d \nCol%d",row,col);
 	setMotorSyncTime(left, right, 0, 1000, POWER1);
+	r++;
 	row ++;
 
 	}//end while
+
+
+
 	//turn left
 		setMotorSyncTime(left, right, turn, 1000, 50);
-		wait1Msec(500);
+		wait1Msec(550);
 		return (row);
 }//end evenTrav()
 
@@ -243,9 +293,8 @@ int evenTurn(int turn,int row,int threshold)
 void traverse(int lines,int threshold)
 {
 	int i = lines;
-	static int rowCount=0;
-	static int colCount=0;
-
+	int rowCount=0;
+	int colCount=0;
 
 	int left = -100;
 	int right = 100;
@@ -255,7 +304,7 @@ void traverse(int lines,int threshold)
 
 	/*if the line is odd do something, if its even do something else. and keep count of all the lines. Lines will
 	correspond to the number of Rows*/
-	while(i < ROWS)
+	while(i <= ROWS)
 	{
 
 		if(i % 2 == 1)
@@ -273,64 +322,75 @@ void traverse(int lines,int threshold)
 		rowCount ++;
 }//end while
 
+		//TESTING WRITING TO FILE********************************
+		writeFile(ptr);
+
 }//end travers()
 
-/*the Following function will move from the starting postion to the Xspot, where counting and traversion begins*/
-void xspot(int turn, int flag)
+//XSPOT1
+void xspot1(int turn, int flag)
 {
-	//This mkes roboot move forward over 9 boxes(ensuring the motors are in Sync to go straight at full power)
-	clearTimer(T1);
-  while(time1[T1] <= move9)
-  {
-	  // setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
+    clearTimer(T1);
+
+    // Moves forward over the 9 boxes
+    while(time1[T1] <= move9)
+    {
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
 		wait1Msec(1000);
+		}//end while
 
-	}//end while
-	wait1Msec(1000);
-	// a flag is used from the main to determine what the logic does
-	if(flag == 0)
-{
-	// turns the robot left for over half a second. This makes it go left (all power to right)
-	setMotorSyncTime(left, right, turn, 1000, 50);
-	wait1Msec(590);
-
-	//straight forward for 3 seconds
-	clearTimer(T1);
-  while(time1[T1] <= move3)
-  {
-	setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-	}//end while
-
-		//turns left leaving us on the Xspot mark to start the count
+		wait1Msec(1000);
+		//do a 180 turn
+		// turns the robot left for over half a second. This makes it go left (all power to right)
 		setMotorSyncTime(left, right, turn, 1000, 50);
-		wait1Msec(590);
+		wait1Msec(1000);
 
-}//end if
-else
+		//flag for xspot Return
+
+		if(flag == 1)
+	    {
+	        // Turns left
+	        setMotorSyncTime(left, right, turn, 1000, 50);
+	        wait1Msec(500);
+
+	        //straight forward for 7 boxes
+	        clearTimer(T1);
+	        while(time1[T1] <= move06) //This will change based on where the starting position is****
+	        {
+	            setMotorSyncTime(left, right, 0, 1000, POWER1);
+	        }//end while
+    }//end if
+}//End xspot1()
+
+/*void xspot3(int turn, int flag)
 {
-	//turns Right
-	clearTimer(T1);
-  while(time1[T1] <= move1)
-  {
+
+	if(flag == 1)
+
+    {
+        //turns Right
+        clearTimer(T1);
+        while(time1[T1] <= move1)
+        {
 			setMotorSyncTime(left, right, turn, 1000, 50);
 			wait1Msec(650);
-	}
+        }
 
-		//straight forward for 3 seconds
-	clearTimer(T1);
-  while(time1[T1] <= move3)
-  {
-	setMotorSyncTime(left, right, 0, 1000, POWER1);
-	//scan box color to file
+		   //CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
+          //(map1 does not use this return. refere to xspotReturn)
 
-	}//end while
+        clearTimer(T1);
+        while(time1[T1] <= move02) //move2 move03 move4
+        {
+            setMotorSyncTime(left, right, 0, 1000, POWER1);
+            //scan box color to file
 
-}//end else
+        }//end while
 
-}//end xspot()
+    }//end if
 
+}//End xspot()
+*/
 task main()
 {
 	int left = -100; //used to gauge the turns(left)
@@ -345,45 +405,45 @@ task main()
   threshold = thresHold(value);
   wait1Msec(3000); // to place the robot on the appropriate square
 
-	//xspot
+	//xspot logic pick a map (xspot1 is our map , xspot 3 is maps 2 3 and 4 **swap out the variable)
   activate(); // says activate when going to xspot
-
-  //This will need to be adjusted for 4 different grids. <CRAIG>
-	//xspot(left, flag);
+	//xspot1(left, flag);  //this starts on map (1,1)
+	//xspot3(left,flag);
 
 	//traverse function
 	traverse(lines,threshold);
 
-	//writeFile();
+	//Pass the global array over and write to file.
+	writeFile(ptr);
 
 	//xspot return. This will change to whatever map(1-4)
 	wait1Msec(2000);
-	flag = 1;
-	xspot(right,flag);
+	flag = 1; //use the flag to indicate its the return
+	//The xspot return functions
+	//xspot1(left, flag);
+	//xspot3(left,flag);
 
-
+	//display answers on LCD
+  displayBigTextLine(3, "Total Boxes %d",boxTotal);
+  wait1Msec(2000);
+  displayBigTextLine(3, "white Boxes %d",whiteTotal);
+  wait1Msec(2000);
+  displayBigTextLine(3, "Black Boxes %d",blackTotal);
+  wait1Msec(2000);
+	cheering();
 
 	//Logic for locating object here
 	//function
 
-	//Ram object logic here
-	//function
-
-
-
 	//display Grid on LCD
-	  for(i=0;i<ROWS;i++)
-    {
-        for(j=0;j<COLS;j++)
-        {
-        		displayBigTextLine(1,"%d",mapGrid[i][j]);
 
-        }//end inner for
-       displayBigTextLine(1,"\n");
-    }//end outter for
 
 	//Lab complete!
+  displayBigTextLine(3, "Total Boxes %d",boxTotal);
+  wait1Msec(2000);
+  displayBigTextLine(3, "white Boxes %d",whiteTotal);
+  wait1Msec(2000);
+  displayBigTextLine(3, "Black Boxes %d",blackTotal);
+  wait1Msec(2000);
 	cheering();
-
-
 }//end main

@@ -1,73 +1,48 @@
-/* Xspot one code 
+/* Xspot one code
     Starts on (1,1)
 */
-
 #pragma config(Motor,  motorB,          left,          tmotorEV3_Large, PIDControl, driveLeft, encoder)
 #pragma config(Motor,  motorC,          right,         tmotorEV3_Large, PIDControl, driveRight, encoder)
 
-#define POWER1 100
+#define POWER1 40
+#define POWER2 80
 
-int move9 = 9000;
+int move9 = 2500;
 int move0 = 0;
 int move1 = 900;
 
-void xspot(int turn, int flag)
+void xspot1(int turn, int flag)
 {
-    clearTimer(T1); 
-    
+    clearTimer(T1);
+
     // Moves forward over the 9 boxes
     while(time1[T1] <= move9)
     {
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
 		wait1Msec(1000);
+		}//end while
 
-	}//end while
-    
-	wait1Msec(1000);
+		wait1Msec(1000);
+		//do a 180 turn
+		// turns the robot left for over half a second. This makes it go left (all power to right)
+		setMotorSyncTime(left, right, turn, 1000, 50);
+		wait1Msec(1000);
 
-	if(flag == 0)
-    {
-        //Turns left
-        setMotorSyncTime(left, right, turn, 1000, 50);
-        wait1Msec(590);
+		//flag for xspot Return
 
-        //straight forward for 0 seconds
-        clearTimer(T1);
-        
-        while(time1[T1] <= move0)
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
-        
-            //scan box color to file logic here
+		if(flag == 1)
+	    {
+	        // Turns left
+	        setMotorSyncTime(left, right, turn, 1000, 50);
+	        wait1Msec(500);
 
-        }//end while
-    
-        //turns left leaving us on the Xspot mark to start the count
-        setMotorSyncTime(left, right, turn, 1000, 50);
-        wait1Msec(590);
-        
+	        //straight forward for 9 boxes
+	        clearTimer(T1);
+	        while(time1[T1] <= move9)
+	        {
+	            setMotorSyncTime(left, right, 0, 1000, POWER1);
+	        }//end while
     }//end if
-    else
-    {
-        //turns Right
-        clearTimer(T1);
-        while(time1[T1] <= move1)
-        {
-			setMotorSyncTime(left, right, turn, 1000, 50);
-			wait1Msec(650);
-        }
-
-		//straight forward for 3 seconds
-        clearTimer(T1);
-        while(time1[T1] <= move3)
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
-            //scan box color to file
-
-        }//end while
-
-    }//end else
-    
 }//End xspot()
 
 task main()
@@ -77,7 +52,7 @@ task main()
 	int flag = 0;
 
 	//xspot
-	xspot(left, flag);
+	xspot1(left, flag);
 
 	//enter other code here
 
@@ -85,7 +60,7 @@ task main()
 	//xspot return
 	wait1Msec(2000);
 	flag = 1;
-	xspot(right,flag);
+	xspot1(right,flag);
 
 
 }//end main

@@ -1,4 +1,4 @@
-/* Xspot three code 
+/* Xspot three code
     Starts on (3,1)
 */
 
@@ -8,46 +8,16 @@
 #define POWER1 100
 
 int move9 = 9000;
+int move7 = 7000;
+int move4 = 4000;
 int move2 = 2000;
 int move1 = 900;
 
-void xspot(int turn, int flag)
+void xspot3(int turn, int flag)
 {
-    clearTimer(T1); 
-    
-    // Moves forward over the 9 boxes
-    while(time1[T1] <= move9)
-    {
-		setMotorSyncTime(left, right, 0, 1000, POWER1);
-		wait1Msec(1000);
 
-	}//end while
-    
-	wait1Msec(1000);
+	if(flag == 1)
 
-	if(flag == 0)
-    {
-        // Turns left
-        setMotorSyncTime(left, right, turn, 1000, 50);
-        wait1Msec(590);
-
-        //straight forward for 2 seconds
-        clearTimer(T1);
-        
-        while(time1[T1] <= move2)
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-            //scan box color to file logic here
-
-        }//end while
-
-		//turns left leaving us on the Xspot mark to start the count
-		setMotorSyncTime(left, right, turn, 1000, 50);
-		wait1Msec(590);
-        
-    }//end if
-    else
     {
         //turns Right
         clearTimer(T1);
@@ -57,17 +27,18 @@ void xspot(int turn, int flag)
 			wait1Msec(650);
         }
 
-		//straight forward for 3 seconds
+		  /* CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
+        MAP 3 = move2 : MAP 4 = move3 : MAP5 = move4   (map1 does not use this return. refere to xspotReturn)*/
         clearTimer(T1);
-        while(time1[T1] <= move3)
+        while(time1[T1] <= move2) //move2 move3 move4
         {
             setMotorSyncTime(left, right, 0, 1000, POWER1);
             //scan box color to file
 
         }//end while
 
-    }//end else
-    
+    }//end if
+
 }//End xspot()
 
 task main()
