@@ -24,7 +24,7 @@ int mapGrid[ROWS][COLS]={0,0,0,0,0,0,0,0,0,
 int boxTotal=0;
 int blackTotal=0;
 int whiteTotal=0;
-int move9 =25000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
+int move9 =10000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
 int move06 = 16600;
 int move03= 8300;
 int move04 = 11100;
@@ -41,12 +41,17 @@ void writeFile(int *ptr)
 
 	string fileName = "GRIDMAPPING1";
 	long filehandle;
+	string finaloutput = "\n black boxes is %d";
 	string info="White ,";
 	string newLine = "\n";
 	int strlen1 = strlen(newLine); // do the same for all rows, (line 1-7)
 	int strlen2 = strlen(info);
+	int strlen3 = strlen(finaloutput);
 	int i,j;
 
+	char *bTotal= "\ntotal black boxes is %d";
+	char *wTotal= "\ntotal white boxes is %d";
+	char *ATotal= "\ntotal boxes is %d";
 	char *white = "0 ,";
 	char *black = "1 ,";
 	char *spac = "\n";
@@ -60,7 +65,7 @@ void writeFile(int *ptr)
 			{
 				fileWriteData(filehandle,white,strlen2);
 			}//end if white
-			if(mapGrid[i][j]==1)
+			else if(mapGrid[i][j]==1)
 			{
 				fileWriteData(filehandle,black,strlen2);
 			}//end if black
@@ -71,7 +76,11 @@ void writeFile(int *ptr)
 	}//end outter for
 
 	//wrinting the project requirments to the file
-	//fileWriteData(filehandle,black,strlen2);
+
+	//fileWriteData(filehandle,bTotal,strlen3);
+	//fileWriteData(filehandle,wTotal,strlen3);
+	//fileWriteData(filehandle,ATotal,strlen3);
+
 
 fileClose(filehandle);
 }//end writeFile()
@@ -217,6 +226,8 @@ int oddTurn(int turn,int row, int threshold)
 	row++; // increments a row at each row change
 
 	}//end while
+	wait1Msec(500);
+
 	displayBigTextLine(3, "Total Boxes %d",boxTotal);
 
   displayBigTextLine(3, "white Boxes %d",whiteTotal);
@@ -228,6 +239,9 @@ int oddTurn(int turn,int row, int threshold)
 		setMotorSyncTime(left, right, -100, 1000, 50);
 		wait1Msec(550);
 		return (row);
+			wait1Msec(1000);
+
+			//correct position here
 
 }//end oddTrav()
 
@@ -280,13 +294,20 @@ int evenTurn(int turn,int row,int threshold)
 	row ++;
 
 	}//end while
-
-
+	wait1Msec(500);
 
 	//turn left
 		setMotorSyncTime(left, right, turn, 1000, 50);
 		wait1Msec(550);
 		return (row);
+			wait1Msec(1000);
+
+			//correct position here
+		/*	if(x blahblah)
+			{
+				correct the wheel position
+			}*/
+
 }//end evenTrav()
 
 //The following program is for the traverse logic.
@@ -336,14 +357,14 @@ void xspot1(int turn, int flag)
     while(time1[T1] <= move9)
     {
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
-		wait1Msec(1000);
+		wait1Msec(1100);
 		}//end while
 
 		wait1Msec(1000);
 		//do a 180 turn
 		// turns the robot left for over half a second. This makes it go left (all power to right)
 		setMotorSyncTime(left, right, turn, 1000, 50);
-		wait1Msec(1000);
+		wait1Msec(1500);
 
 		//flag for xspot Return
 
@@ -407,11 +428,11 @@ task main()
 
 	//xspot logic pick a map (xspot1 is our map , xspot 3 is maps 2 3 and 4 **swap out the variable)
   activate(); // says activate when going to xspot
-	//xspot1(left, flag);  //this starts on map (1,1)
+	xspot1(left, flag);  //this starts on map (1,1)
 	//xspot3(left,flag);
 
 	//traverse function
-	traverse(lines,threshold);
+	//traverse(lines,threshold);
 
 	//Pass the global array over and write to file.
 	writeFile(ptr);
