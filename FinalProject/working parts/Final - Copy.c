@@ -24,8 +24,9 @@ int mapGrid[ROWS][COLS]={0,0,0,0,0,0,0,0,0,
 int boxTotal=0;
 int blackTotal=0;
 int whiteTotal=0;
-int move9 =10000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
-int move06 = 16600;
+int move9i =10000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
+int move9 = 25000;
+int move06 = 5000;
 int move03= 8300;
 int move04 = 11100;
 int move3 = 3000; // moves for 3 seconds
@@ -226,7 +227,7 @@ int oddTurn(int turn,int row, int threshold)
 	row++; // increments a row at each row change
 
 	}//end while
-	wait1Msec(500);
+	//wait1Msec(500);
 
 	displayBigTextLine(3, "Total Boxes %d",boxTotal);
 
@@ -294,7 +295,7 @@ int evenTurn(int turn,int row,int threshold)
 	row ++;
 
 	}//end while
-	wait1Msec(500);
+	//wait1Msec(500);
 
 	//turn left
 		setMotorSyncTime(left, right, turn, 1000, 50);
@@ -334,13 +335,16 @@ void traverse(int lines,int threshold)
 			oddTurn(left,rowCount,threshold);
 
 		}//end if
-		else if(i % 2 == 0)
-		{
-			evenTurn(right,rowCount,threshold);
+	if(rowCount <8)    //*************************************check this to ensure it worked. it should stop a turn on the last row.
+	{
+			else if(i % 2 == 0)
+			{
+				evenTurn(right,rowCount,threshold);
 
-		}//end else
-		i ++;
-		rowCount ++;
+			}//end else
+			i ++;
+			rowCount ++;
+	}
 }//end while
 
 		//TESTING WRITING TO FILE********************************
@@ -351,10 +355,12 @@ void traverse(int lines,int threshold)
 //XSPOT1
 void xspot1(int turn, int flag)
 {
+	if(flag == 0)
+	{
     clearTimer(T1);
 
     // Moves forward over the 9 boxes
-    while(time1[T1] <= move9)
+    while(time1[T1] <= move9i)
     {
 		setMotorSyncTime(left, right, 0, 1000, POWER1);
 		wait1Msec(1100);
@@ -363,18 +369,20 @@ void xspot1(int turn, int flag)
 		wait1Msec(1000);
 		//do a 180 turn
 		// turns the robot left for over half a second. This makes it go left (all power to right)
-		setMotorSyncTime(left, right, turn, 1000, 50);
-		wait1Msec(1500);
+		setMotorSyncTime(left, right, turn, 1000, 100);
+		wait1Msec(2000);
+	}
 
 		//flag for xspot Return
 
-		if(flag == 1)
+	else if(flag == 1)
 	    {
 	        // Turns left
-	        setMotorSyncTime(left, right, turn, 1000, 50);
+	        setMotorSyncTime(left, right, turn, 900, -30);
 	        wait1Msec(500);
 
 	        //straight forward for 7 boxes
+	        wait1Msec(1000);
 	        clearTimer(T1);
 	        while(time1[T1] <= move06) //This will change based on where the starting position is****
 	        {
@@ -432,16 +440,17 @@ task main()
 	//xspot3(left,flag);
 
 	//traverse function
-	//traverse(lines,threshold);
+	traverse(lines,threshold);
 
 	//Pass the global array over and write to file.
 	writeFile(ptr);
 
 	//xspot return. This will change to whatever map(1-4)
-	wait1Msec(2000);
+	wait1Msec(3000);
 	flag = 1; //use the flag to indicate its the return
 	//The xspot return functions
-	//xspot1(left, flag);
+
+	xspot1(left, flag);
 	//xspot3(left,flag);
 
 	//display answers on LCD
