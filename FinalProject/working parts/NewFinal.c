@@ -7,7 +7,7 @@
 
 //REMEMBER CHANGE THE VALUE OF TIME TO SUIT THE SIZE OF THE GRID. 1sec = 1box may need to be adjusted
 #define POWER1 40
-#define POWER2 80
+//#define POWER2 80
 #define ROWS 7
 #define COLS 9
 
@@ -19,7 +19,7 @@ int mapGrid[ROWS][COLS]={0,0,0,0,0,0,0,0,0,
 												0,0,0,0,0,0,0,0,0,
 												0,0,0,0,0,0,0,0,0,
 												0,0,0,0,0,0,0,0,0};
-
+int startingCol=1;
 int boxTotal=0;
 int blackTotal=0;
 int whiteTotal=0;
@@ -27,19 +27,20 @@ int whiteTotal=0;
 int move9i =10000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
 int move9 = 25000;
 int move06 = 5000;
-int move07 = 6000;
-int move03= 8300;
-int move04 = 11100;
-int move3 = 3000; // moves for 3 seconds
-int move02 = 5550;
+//int move07 = 6000;
+int move03= 2000;
+int move04 = 3000;
+int move05 = 4000;
+//int move3 = 3000; // moves for 3 seconds
+int move02 = 2000;
 int move1 = 900; // moves for 1 second
 
-int *ptr = &mapGrid;
+
 string filename = "EricCraigPart1";
 string filename2 = "EricCraigPart2";
 
 //write to file function
-void part1(int *p)
+void part1(int rowReference)
 {
 	int finalMap[ROWS][COLS];
 
@@ -81,7 +82,7 @@ for(i=0;i<ROWS;i++)
   int strlenW = strlen(stringW);
   string stringWn = whiteTotal;
 
-  string stringN = "XX.";
+  string stringN = "XX";
   int strlenNum = strlen(stringN);
 
   fileWriteData(fileHandle, stringW, strlenW);
@@ -103,59 +104,75 @@ for(i=0;i<ROWS;i++)
   fileWriteData(fileHandle, stringT, strlenT);
   fileWriteData(fileHandle, stringTn, strlenNum);
 
+  	//Starting Location
+  string stringST = "Starting Point=";
+  int strlenST = strlen(stringST);
+  string stringR = rowReference;
+  string stringC = startingCol;
+  string comma = ",";
+
+  fileWriteData(fileHandle, stringST, strlenST);
+  fileWriteData(fileHandle, stringR, strlenNum);
+  fileWriteData(fileHandle, comma, strlenNum);
+  fileWriteData(fileHandle, stringC, strlenNum);
+
 }//end part1
 
-/*write to file function
-void writeFile(int *ptr)
+//write to file function for object Location
+void part2(int C, int R)
 {
-
-	string fileName = "GRIDMAPPING1";
-	long filehandle;
-
-	string finaloutput = "\n black boxes is %d";
-	string info="White ,";
-	string newLine = "\n";
-	int strlen1 = strlen(newLine); // do the same for all rows, (line 1-7)
-	int strlen2 = strlen(info);
-	int strlen3 = strlen(finaloutput);
 	int i,j;
+	int finalMap[ROWS][COLS];
 
-	//char *bTotal= "\ntotal black boxes is %d";
-	//char *wTotal= "\ntotal white boxes is %d";
-	//char *ATotal= "\ntotal boxes is %d";
-	char *white = "0 ,";
-	char *black = "1 ,";
-	char *spac = "\n";
-	filehandle = fileOpenWrite(fileName);
+	long fileHandle;
+	fileHandle = fileOpenWrite(filename2);
 
-	for (i = 0; i <  ROWS; i++)
-	{
-		for (j = 0; j < COLS; j++)
-		{
-			if(mapGrid[i][j]==0)
-			{
-				fileWriteData(filehandle,white,strlen2);
-			}//end if white
-			if(mapGrid[i][j]==1)
-			{
-				fileWriteData(filehandle,black,strlen2);
-			}//end if black
-				//fileWriteData(filehandle,spac,strlen1);
+	  	//ITEM LOCATION
+  string stringT = "ItemLocated at ";
+  int strlenT = strlen(stringT);
+  string stringR = R;
+  string stringC = C;
 
-		}//end inner for
+  string stringN = "X";
+  string comma = ",";
+  int strlenNum = strlen(stringN);
+  string stringBlack = "Box is Black";
+  string stringWhite = "Box is White";
+  int strlenNum1 = strlen(stringBlack);
 
-	}//end outter for
+  fileWriteData(fileHandle, stringT, strlenT);
+  fileWriteData(fileHandle, stringR, strlenNum);
+  fileWriteData(fileHandle, comma, strlenNum);
+  fileWriteData(fileHandle, stringC, strlenNum);
 
-	//wrinting the project requirments to the file
+	//look up the array reference
+	//Remember to subtract 1 from each value as the values are in Human form not array form
+		for(i=0;i<ROWS;i++)
+{
+    for(j=0;j<COLS;j++)
+    {
 
-	//fileWriteData(filehandle,bTotal,strlen3);
-	//fileWriteData(filehandle,wTotal,strlen3);
-	//fileWriteData(filehandle,ATotal,strlen3);
+    finalMap[R][C] = mapGrid[R][C];
+
+    }//end inner for
+}//end outter for
+
+	if(finalMap[R][C]==1)
+    {
+
+    	 fileWriteData(fileHandle, stringBlack, strlenNum1);
+
+			//break;
+    }	//end if
+    else
+    {
+   			  fileWriteData(fileHandle, stringWhite, strlenNum1);
+   	 //break;
+    }//end else
 
 
-fileClose(filehandle);
-}//end writeFile()
-*/
+
+}//end part2
 
 
 /*The following are Sound Files to distinguish what colour the box is and other prompts*/
@@ -208,29 +225,82 @@ void black()
 	sleep(1000);
 }//end black()
 
-
-
 //scanObject function ................
-void scanObject()
+int scanObject(int objectMove)
 {
 	int distanceToMaintain = 90;
-
 	int currentDistance = 0;
-	 clearTimer(T1); // timer for each Row traversed
-   // Moves forward over the 9 boxes
+	int itemLocateCOL = 0;
+	clearTimer(T1); // timer for each Row traversed
+	//int RowCount = objectMove; // object move value is also the Row reference
+	int RowCount=-1;  //because of the one extra, that way we dont miss row 0, col 0
 
-	while(true)
+   // Moves the Robot again to the top Grid
+   if (objectMove == 3)
+   {
+   		 clearTimer(T1);
+        while(time1[T1] <= move03) //move04  move03 move1 **************
+        {
+            setMotorSyncTime(left, right, 0, 1000, POWER1);
+            searching();
+
+        }//end while
+
+ 	}//end if move2
+
+ 	   if (objectMove == 4)
+   	{
+   		 		 clearTimer(T1);
+        while(time1[T1] <= move04) //move04  move03 move1 **************
+        {
+            setMotorSyncTime(left, right, 0, 1000, POWER1);
+            searching();
+
+        }//end while
+
+
+ 		}//end if move3
+
+ 		   if (objectMove == 5)
+   	{
+   			 		 clearTimer(T1);
+        while(time1[T1] <= move05) //move04  move03 move1 **************
+        {
+            setMotorSyncTime(left, right, 0, 1000, POWER1);
+            searching();
+
+        }//end while
+
+ 		}//end if move4
+
+  else {
+  	 searching();
+
+  		}
+
+  			//THE EXTRA ONE FORWARD!!!!
+		clearTimer(T1);
+	  while(time1[T1] <= move1)
 	  {
 
-			currentDistance = SensorValue[sonar];
+		setMotorSyncTime(left, right, 0, 1000, POWER1);
 
+		}//end while
+
+
+	//Searching for oject
+	while(true)
+	  {
+			currentDistance = SensorValue[sonar];
 			displayCenteredBigTextLine(4, "Dist: %d", currentDistance);
 
 			if ((distanceToMaintain - currentDistance) < 1)
 			{
 				searching();
-				motor[left] = -30;
-				motor[right] = -30;
+
+				setMotorSyncTime(left, right, 0, 1000, -POWER1);
+				wait1Msec(1500);
+				RowCount ++;
 			}//end if
 
 			else if((distanceToMaintain - currentDistance) >0)
@@ -239,10 +309,13 @@ void scanObject()
 				motor[left] = 0;
 				motor[right] = 0;
 
-				//take the cell reference
-				//NEW PART2 in HERE!
-				wait1Msec(5000);
-	}//end while
+				itemLocateCOL = currentDistance / 8; // because the robot is already on Col 1, there are only 8 columns to calculate
+				//take the cell reference and print to file Final part
+				part2(itemLocateCOL,RowCount);
+				wait1Msec(3000);
+				return 0;
+
+		}//end else if
 
 		sleep(50);
 	}//end while
@@ -392,12 +465,8 @@ int oddTurn(int turn,int row, int threshold)
 	  turnLeft(0.72,rotations,50);
 		sleep(1500);
 
-			return (row);
+			return(row);
 				wait1Msec(625);
-
-				//correct position here
-				//PArt2 fixer
-
 
 	}//end else
 }//end oddTrav()
@@ -454,7 +523,7 @@ int evenTurn(int turn,int row,int threshold)
 	turnRight(0.7,rotations,50);
 	sleep(1500);
 
-		return (row);
+			return (row);
 			wait1Msec(1000);
 
 		//correct position
@@ -488,7 +557,7 @@ void traverse(int lines,int threshold)
 
 		else if(i % 2 == 0)
 			{
-				evenTurn(right,rowCount,threshold);
+			evenTurn(right,rowCount,threshold);
 
 			}//end else
 			i ++;
@@ -499,8 +568,9 @@ void traverse(int lines,int threshold)
 }//end travers()
 
 //XSPOT1
-void xspot1(int turn, int flag)
+int xspot1(int turn, int flag)
 {
+
 	if(flag == 0)
 	{
     clearTimer(T1);
@@ -537,50 +607,80 @@ void xspot1(int turn, int flag)
 	        {
 	            setMotorSyncTime(left, right, 0, 1000, POWER1);
 	        }//end while
+	        return 1;
+
     }//end if
 }//End xspot1()
-
-/*void xspot3(int turn, int flag)
+/*
+int xspot3(int turn, int flag)
 {
+	int objectMove;
+	if(flag == 0)
+	{
+    clearTimer(T1);
 
-	if(flag == 1)
-
+    // Moves forward over the 9 boxes
+    while(time1[T1] <= move9i)
     {
-        //turns Right
-        clearTimer(T1);
-        while(time1[T1] <= move1)
-        {
-			setMotorSyncTime(left, right, turn, 1000, 50);
-			wait1Msec(650);
-        }
+		setMotorSyncTime(left, right, 0, 1000, POWER1);
 
-		   //CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
-          //(map1 does not use this return. refere to xspotReturn)
+		wait1Msec(1100);
+		}//end while
+		wait1Msec(1000);
 
-        clearTimer(T1);
-        while(time1[T1] <= move02) //move2 move03 move4
+		// turns the robot left for over half a second. This makes it go left (all power to right)
+
+		turnLeft(0.7,rotations,50);
+		sleep(1500);
+
+		 clearTimer(T1);
+
+        while(time1[T1] <= move05) //move02 move04 move05*********************
         {
             setMotorSyncTime(left, right, 0, 1000, POWER1);
             //scan box color to file
 
         }//end while
 
-    }//end if
+  turnLeft(0.7,rotations,50);
+	sleep(1500);
 
+	}//end if
+
+
+	if(flag == 1)
+
+    {
+        //turns Right
+    		turnRight(0.7,rotations,50);
+				sleep(1500);
+
+
+		   //CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
+          //(map1 does not use this return. refere to xspotReturn)
+
+        clearTimer(T1);
+        while(time1[T1] <= move1) //move04  move03 move1 **************
+        {
+            setMotorSyncTime(left, right, 0, 1000, POWER1);
+
+        }//end while *************************IMPORTANT
+        objectMove = 5;
+        return(objectMove); // return 3,4,5 is to be used to make the robot move again to the final position
+       	//to locate the object
+    }//end if
 }//End xspot()
 */
-
-
-
 
 task main()
 {
 	int left = -100; //used to gauge the turns(left)
-	int right = 40;  //used to gauge the turns(Right)
+	//int right = 40;  //used to gauge the turns(Right)
 	int flag = 0;		//used to flag a behaiour
 	int lines = 1;	//line count, starting at 1
 	int value = 0;	//value is used for the threshold
   int threshold=0; // stores the threshold returned from the function
+  int objectMove=0;
 
 
   //get threshold from function
@@ -595,16 +695,16 @@ task main()
 	//traverse function
 	traverse(lines,threshold);
 
-	//Pass the global array over and write to file.
-  part1(ptr);
-
 	//xspot return. This will change to whatever map(1-4)
 	wait1Msec(3000);
 	flag = 1; //use the flag to indicate its the return
-	//The xspot return functions
 
-	xspot1(left, flag);
-	//xspot3(left,flag);
+	//The xspot return functions
+	objectMove=xspot1(left, flag);
+	//objectMove = xspot3(left,flag);
+
+	//Pass the global array over and write to file.
+	part1(objectMove);
 
 	//display answers on LCD
   displayBigTextLine(3, "Total Boxes %d",boxTotal);
@@ -615,10 +715,20 @@ task main()
   wait1Msec(2000);
 	cheering();
 
+	//Logic to move the robot to top grid for scan object
+	while(SensorValue(touchSensor) == 0)
+ {
+   displayBigTextLine(3, "Place Object.....");
+ }//end while
+
 	//Logic for locating object here
-	scanObject();
+	scanObject(objectMove);
 
 	//Lab complete!
+	displayBigTextLine(3, "Object (X,X)");
+  wait1Msec(2000);
+   displayBigTextLine(3, "on a Black Square");
+  wait1Msec(2000);
   displayBigTextLine(3, "Total Boxes %d",boxTotal);
   wait1Msec(2000);
   displayBigTextLine(3, "white Boxes %d",whiteTotal);
@@ -626,5 +736,4 @@ task main()
   displayBigTextLine(3, "Black Boxes %d",blackTotal);
   wait1Msec(2000);
 	cheering();
-
 }//end main
