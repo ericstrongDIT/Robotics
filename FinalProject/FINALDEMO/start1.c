@@ -7,7 +7,6 @@
 
 //REMEMBER CHANGE THE VALUE OF TIME TO SUIT THE SIZE OF THE GRID. 1sec = 1box may need to be adjusted
 #define POWER1 40
-//#define POWER2 80
 #define ROWS 7
 #define COLS 9
 
@@ -23,22 +22,11 @@ int startingCol=1;
 int boxTotal=0;
 int blackTotal=0;
 int whiteTotal=0;
-
-int move9i =10000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
 int move9 = 25000;
-int move06 = 5000;
-//int move07 = 6000;
-int move03= 2000;
-int move04 = 3000;
-int move05 = 4000;
-//int move3 = 3000; // moves for 3 seconds
-int move02 = 2000;
 int move1 = 900; // moves for 1 second
-
 
 string filename = "T4_7_File1";
 string filename2 = "T4_7_File2";
-
 
 //write to file function
 void part1(int rowReference)
@@ -76,7 +64,6 @@ for(i=0;i<ROWS;i++)
 
     }//end inner for
 }//end outter for
-
 
   	//WHITE BOX TOTAL
   string stringW = "Total White Boxes=";
@@ -170,11 +157,7 @@ void part2(int C, int R)
    			  fileWriteData(fileHandle, stringWhite, strlenNum1);
    	 //break;
     }//end else
-
-
-
 }//end part2
-
 
 /*The following are Sound Files to distinguish what colour the box is and other prompts*/
 void cheering()
@@ -258,7 +241,6 @@ int scanObject(int objectMove)
   	 searching();
 
   		}
-
   	//THE EXTRA ONE FORWARD!!!!
 		clearTimer(T1);
 	  forward(1,rotations,30);
@@ -298,7 +280,6 @@ int scanObject(int objectMove)
 	}//end while
 
 }//end scanObject
-
 //This function scans the box, prompts a sound a writes to a file
 //Fwrite the display of row col to a file along with the details of the box color
 void scanBox(int threshold, int r, int c)
@@ -351,7 +332,6 @@ int thresHold(int threshold)
  threshold = total / 2;
  return(threshold);
 }//end threshold
-
 
 //oddTrav() is based on the odd numbered Rows. and does a specific behaviour of turns
 int oddTurn(int turn,int row, int threshold)
@@ -500,10 +480,8 @@ int evenTurn(int turn,int row,int threshold)
 	turnRight(0.7,rotations,50);
 	sleep(1500);
 
-			return (row);
-			wait1Msec(1000);
-
-		//correct position
+	return (row);
+	wait1Msec(1000);
 
 }//end evenTrav()
 
@@ -527,9 +505,7 @@ void traverse(int lines,int threshold)
 
 		if(i % 2 == 1)
 		{
-
 			oddTurn(left,rowCount,threshold);
-
 		}//end if
 
 		else if(i % 2 == 0)
@@ -551,19 +527,6 @@ int xspot1(int turn, int flag)
 	if(flag == 0)
 	{
 
-/*
-		clearTimer(T1);
-    // Moves forward over the 9 boxes
-    while(time1[T1] <= move9i)
-    {
-		setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-
-
-		wait1Msec(1100);
-		}//end while
-		*/
-
 		forward(10.5,rotations,30);
 		wait1Msec(1000);
 		//do a 180 turn
@@ -579,88 +542,18 @@ int xspot1(int turn, int flag)
 	else if(flag == 1)
 	    {
 	        // Turns left
-	        //setMotorSyncTime(left, right, turn, 900, -30);
 	    		turnRight(0.7,rotations,50);
 	        wait1Msec(500);
 
 	        //straight forward for 7 boxes
 	        wait1Msec(1000);
-	        	forward(6,rotations,30);
-						wait1Msec(1000);
-	        /*clearTimer(T1);
-	        while(time1[T1] <= move06) //This will change based on where the starting position is****
-	        {
-	            setMotorSyncTime(left, right, 0, 1000, POWER1);
-	        }//end while
-	        */
+	        forward(6,rotations,30);
+					wait1Msec(1000);
+
 	        return 1;
 
     }//end if
 }//End xspot1()
-
-/*
-int xspot3(int turn, int flag)
-{
-	int objectMove;
-	if(flag == 0)
-	{
-    clearTimer(T1);
-
-    /* Moves forward over the 9 boxes
-    while(time1[T1] <= move9i)
-    {
-		setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-		wait1Msec(1100);
-		}//end while
-
-		forward(10.5,rotations,30);
-
-		wait1Msec(1000);
-
-		// turns the robot left for over half a second. This makes it go left (all power to right)
-
-		turnLeft(0.7,rotations,50);
-		sleep(1500);
-
-		 clearTimer(T1);
-
-        while(time1[T1] <= move04) //move02 move04 move05*********************
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
-            //scan box color to file
-
-        }//end while
-
-  turnLeft(0.7,rotations,50);
-	sleep(1500);
-
-	}//end if
-
-
-	if(flag == 1)
-
-    {
-        //turns Right
-    		turnRight(0.7,rotations,50);
-				sleep(1500);
-
-
-		   //CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
-          //(map1 does not use this return. refere to xspotReturn)
-
-        clearTimer(T1);
-        while(time1[T1] <= move03) //move04  move03 move1 **************
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-        }//end while *************************IMPORTANT
-        objectMove = 4;
-        return(objectMove); // return 3,4,5 is to be used to make the robot move again to the final position
-       	//to locate the object
-    }//end if
-}//End xspot()
-*/
 
 task main()
 {
@@ -680,7 +573,7 @@ task main()
 	//xspot logic pick a map (xspot1 is our map , xspot 3 is maps 2 3 and 4 **swap out the variable)
   activate(); // says activate when going to xspot
 	xspot1(left, flag);  //this starts on map (1,1)
-	//xspot3(left,flag);
+
 
 	//traverse function
 	traverse(lines,threshold);
@@ -691,7 +584,7 @@ task main()
 
 	//The xspot return functions
 	objectMove=xspot1(left, flag);
-	//objectMove = xspot3(left,flag);
+
 
 	//Pass the global array over and write to file.
 	part1(objectMove);

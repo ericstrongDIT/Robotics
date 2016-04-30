@@ -24,15 +24,11 @@ int boxTotal=0;
 int blackTotal=0;
 int whiteTotal=0;
 
-int move9i =10000; //moves for 9 boxes (25000 / 9 = 2.77per box including pause for 1 second)
+
+
 int move9 = 25000;
-int move06 = 5000;
-//int move07 = 6000;
 int move03= 2000;
 int move04 = 3000;
-int move05 = 4000;
-//int move3 = 3000; // moves for 3 seconds
-int move02 = 2000;
 int move1 = 900; // moves for 1 second
 
 
@@ -544,78 +540,13 @@ void traverse(int lines,int threshold)
 
 }//end travers()
 
-//XSPOT1
-int xspot1(int turn, int flag)
-{
-
-	if(flag == 0)
-	{
-
-/*
-		clearTimer(T1);
-    // Moves forward over the 9 boxes
-    while(time1[T1] <= move9i)
-    {
-		setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-
-
-		wait1Msec(1100);
-		}//end while
-		*/
-
-		forward(10.5,rotations,30);
-		wait1Msec(1000);
-		//do a 180 turn
-		// turns the robot left for over half a second. This makes it go left (all power to right)
-
-	turnRight(1.35,rotations,50);
-	sleep(1500);
-
-	}
-
-		//flag for xspot Return
-
-	else if(flag == 1)
-	    {
-	        // Turns left
-	        //setMotorSyncTime(left, right, turn, 900, -30);
-	    		turnRight(0.7,rotations,50);
-	        wait1Msec(500);
-
-	        //straight forward for 7 boxes
-	        wait1Msec(1000);
-	        	forward(6,rotations,30);
-						wait1Msec(1000);
-	        /*clearTimer(T1);
-	        while(time1[T1] <= move06) //This will change based on where the starting position is****
-	        {
-	            setMotorSyncTime(left, right, 0, 1000, POWER1);
-	        }//end while
-	        */
-	        return 1;
-
-    }//end if
-}//End xspot1()
-
-/*
 int xspot3(int turn, int flag)
 {
 	int objectMove;
 	if(flag == 0)
 	{
-    clearTimer(T1);
-
-    /* Moves forward over the 9 boxes
-    while(time1[T1] <= move9i)
-    {
-		setMotorSyncTime(left, right, 0, 1000, POWER1);
-
-		wait1Msec(1100);
-		}//end while
 
 		forward(10.5,rotations,30);
-
 		wait1Msec(1000);
 
 		// turns the robot left for over half a second. This makes it go left (all power to right)
@@ -660,27 +591,23 @@ int xspot3(int turn, int flag)
        	//to locate the object
     }//end if
 }//End xspot()
-*/
 
 task main()
 {
 	int left = -100; //used to gauge the turns(left)
-	//int right = 40;  //used to gauge the turns(Right)
 	int flag = 0;		//used to flag a behaiour
 	int lines = 1;	//line count, starting at 1
 	int value = 0;	//value is used for the threshold
   int threshold=0; // stores the threshold returned from the function
   int objectMove=0;
 
-
   //get threshold from function
   threshold = thresHold(value);
   wait1Msec(3000); // to place the robot on the appropriate square
 
-	//xspot logic pick a map (xspot1 is our map , xspot 3 is maps 2 3 and 4 **swap out the variable)
+	//xspot logic
   activate(); // says activate when going to xspot
-	xspot1(left, flag);  //this starts on map (1,1)
-	//xspot3(left,flag);
+	xspot3(left,flag);
 
 	//traverse function
 	traverse(lines,threshold);
@@ -690,8 +617,7 @@ task main()
 	flag = 1; //use the flag to indicate its the return
 
 	//The xspot return functions
-	objectMove=xspot1(left, flag);
-	//objectMove = xspot3(left,flag);
+	objectMove = xspot3(left,flag);
 
 	//Pass the global array over and write to file.
 	part1(objectMove);
