@@ -14,12 +14,12 @@
 //global variables
 //array used to map out the grid. All initialized to zero
 int mapGrid[ROWS][COLS]={0,0,0,0,0,0,0,0,0,
-												0,0,0,0,0,0,0,0,0,
-												0,0,0,0,0,0,0,0,0,
-												0,0,0,0,0,0,0,0,0,
-												0,0,0,0,0,0,0,0,0,
-												0,0,0,0,0,0,0,0,0,
-												0,0,0,0,0,0,0,0,0};
+	0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0};
 
 int startingCol=1;	//used for the starting position
 int boxTotal=0;			//counter for total boxes
@@ -47,84 +47,84 @@ string filename2 = "T4_7_File2";
 void part1(int rowReference)
 {
 	int finalMap[ROWS][COLS];
- 	long fileHandle;
+	long fileHandle;
 	string string1 =" White ,";
-  int strlen1 = strlen(string1);
+	int strlen1 = strlen(string1);
 	string string2 = " Black, ";
-  int strlen2 = strlen(string2);
-  fileHandle = fileOpenWrite(filename);
+	int strlen2 = strlen(string2);
+	fileHandle = fileOpenWrite(filename);
 	int i,j; //counters for the for loop
 
 	for(i=0;i<ROWS;i++)
 	{
-	    for(j=0;j<COLS;j++)
-	    {
-	    	finalMap[i][j] = mapGrid[i][j]; //copying contents to a local array
+		for(j=0;j<COLS;j++)
+		{
+			finalMap[i][j] = mapGrid[i][j]; //copying contents to a local array
 
-		    if(finalMap[i][j]==1) //checking if the box is black
-		    {
-		    	 fileWriteData(fileHandle, string2, strlen2); //writing to the file (black)
-		    }//end if
-		    else
-		    {
-		   			fileWriteData(fileHandle, string1, strlen1); //writing to the file (white)
-		    }//end else
+			if(finalMap[i][j]==1) //checking if the box is black
+			{
+				fileWriteData(fileHandle, string2, strlen2); //writing to the file (black)
+			}//end if
+			else
+			{
+				fileWriteData(fileHandle, string1, strlen1); //writing to the file (white)
+			}//end else
 
-    	}//end inner for
+		}//end inner for
 	}//end outter for
 
-  //WHITE BOX TOTAL
-  string stringW = "Total White Boxes=";
-  int strlenW = strlen(stringW);
-  string stringWn = whiteTotal;
-  string stringN = "XX";
-  int strlenNum = strlen(stringN);
+	//WHITE BOX TOTAL
+	string stringW = "Total White Boxes=";
+	int strlenW = strlen(stringW);
+	string stringWn = whiteTotal;
+	string stringN = "XX";
+	int strlenNum = strlen(stringN);
 
-  fileWriteData(fileHandle, stringW, strlenW);
-  fileWriteData(fileHandle, stringWn, strlenNum);
+	fileWriteData(fileHandle, stringW, strlenW);
+	fileWriteData(fileHandle, stringWn, strlenNum);
 
-  //BLACK BOX TOTAL
-  string stringB = "Total Black Boxes=";
-  int strlenB = strlen(stringB);
-  string stringBn = blackTotal;
+	//BLACK BOX TOTAL
+	string stringB = "Total Black Boxes=";
+	int strlenB = strlen(stringB);
+	string stringBn = blackTotal;
 
-  fileWriteData(fileHandle, stringB, strlenB);
-  fileWriteData(fileHandle, stringBn, strlenNum);
+	fileWriteData(fileHandle, stringB, strlenB);
+	fileWriteData(fileHandle, stringBn, strlenNum);
 
-  //TOTAL BOX TOTAL
-  string stringT = "Total Boxes=";
-  int strlenT = strlen(stringT);
-  string stringTn = boxTotal;
+	//TOTAL BOX TOTAL
+	string stringT = "Total Boxes=";
+	int strlenT = strlen(stringT);
+	string stringTn = boxTotal;
 
-  fileWriteData(fileHandle, stringT, strlenT);
-  fileWriteData(fileHandle, stringTn, strlenNum);
+	fileWriteData(fileHandle, stringT, strlenT);
+	fileWriteData(fileHandle, stringTn, strlenNum);
 
-  //STARTING LOCATION
-  string stringST = "Starting Point=";
-  int strlenST = strlen(stringST);
-  string stringR = rowReference;
-  string stringC = startingCol;
-  string comma = ",";
+	//STARTING LOCATION
+	string stringST = "Starting Point=";
+	int strlenST = strlen(stringST);
+	string stringR = rowReference;
+	string stringC = startingCol;
+	string comma = ",";
 
-  fileWriteData(fileHandle, stringST, strlenST);
-  fileWriteData(fileHandle, stringR, strlenNum);
-  fileWriteData(fileHandle, comma, strlenNum);
-  fileWriteData(fileHandle, stringC, strlenNum);
+	fileWriteData(fileHandle, stringST, strlenST);
+	fileWriteData(fileHandle, stringR, strlenNum);
+	fileWriteData(fileHandle, comma, strlenNum);
+	fileWriteData(fileHandle, stringC, strlenNum);
 
-  //NUMBER OF ROWS AND COLS
-  string stringN1 = "X";
-  int strlenN1 = strlen(stringN1);
-  string stringST1 = "ROWS=";
-  int strlenST1 = strlen(stringST1);
-  string stringR1 = i+1;			//index starts at 0, but humans read 1-n
-  string stringST2 = "COLS=";
-  int strlenST2 = strlen(stringST2);
-  string stringC1 = j+1;		//index starts at 0
+	//NUMBER OF ROWS AND COLS
+	string stringN1 = "X";
+	int strlenN1 = strlen(stringN1);
+	string stringST1 = "ROWS=";
+	int strlenST1 = strlen(stringST1);
+	string stringR1 = i+1;			//index starts at 0, but humans read 1-n
+	string stringST2 = "COLS=";
+	int strlenST2 = strlen(stringST2);
+	string stringC1 = j+1;		//index starts at 0
 
-  fileWriteData(fileHandle, stringST1, strlenST1);
-  fileWriteData(fileHandle, stringR1, strlenN1);
-  fileWriteData(fileHandle, stringST2, strlenST2);
-  fileWriteData(fileHandle, stringC1, strlenN1);
+	fileWriteData(fileHandle, stringST1, strlenST1);
+	fileWriteData(fileHandle, stringR1, strlenN1);
+	fileWriteData(fileHandle, stringST2, strlenST2);
+	fileWriteData(fileHandle, stringC1, strlenN1);
 
 
 }//end part1
@@ -140,46 +140,46 @@ void part2(int C, int R)
 	fileHandle = fileOpenWrite(filename2);
 
 	//ITEM LOCATION
-  string stringT = "ItemLocated at ";
-  int strlenT = strlen(stringT);
-  string stringR = R1+2;
-  string stringC = C1;
+	string stringT = "ItemLocated at ";
+	int strlenT = strlen(stringT);
+	string stringR = R1+2;
+	string stringC = C1;
 
-  string stringN = "X";
-  string comma = ",";
-  int strlenNum = strlen(stringN);
-  string stringBlack = "Box is Black";
-  string stringWhite = "Box is White";
-  int strlenNum1 = strlen(stringBlack);
+	string stringN = "X";
+	string comma = ",";
+	int strlenNum = strlen(stringN);
+	string stringBlack = "Box is Black";
+	string stringWhite = "Box is White";
+	int strlenNum1 = strlen(stringBlack);
 
-  //to display on the robot LCD
-  finalCOL = C1;
-  finalROW = R1;
+	//to display on the robot LCD
+	finalCOL = C1;
+	finalROW = R1;
 
-  fileWriteData(fileHandle, stringT, strlenT);
-  fileWriteData(fileHandle, stringR, strlenNum);
-  fileWriteData(fileHandle, comma, strlenNum);
-  fileWriteData(fileHandle, stringC, strlenNum);
+	fileWriteData(fileHandle, stringT, strlenT);
+	fileWriteData(fileHandle, stringR, strlenNum);
+	fileWriteData(fileHandle, comma, strlenNum);
+	fileWriteData(fileHandle, stringC, strlenNum);
 
 	//look up the array reference
 
 	for(i=0;i<ROWS;i++)
 	{
-    for(j=0;j<COLS;j++)
-    {
+		for(j=0;j<COLS;j++)
+		{
 			finalMap[R][C] = mapGrid[R][C];
 
-    }//end inner for
+		}//end inner for
 	}//end outter for
 
 	if(finalMap[R][C]==1)
-    {
-    	 fileWriteData(fileHandle, stringBlack, strlenNum1);
-    }	//end if
-    else
-    {
-    	fileWriteData(fileHandle, stringWhite, strlenNum1);
-    }//end else
+	{
+		fileWriteData(fileHandle, stringBlack, strlenNum1);
+	}	//end if
+	else
+	{
+		fileWriteData(fileHandle, stringWhite, strlenNum1);
+	}//end else
 }//end part2
 
 /*The following are Sound Files to distinguish what colour the box is and other prompts*/
@@ -240,71 +240,71 @@ int scanObject(int objectMove)
 	int itemLocateCOL = 0;
 	int RowCount=-1;  //because of the one extra, that way we dont miss row 0, col 0
 
-   // Moves the Robot again to the top Grid
-   if (objectMove == 3) // on row 3
-   	{
-   		forward(2.5,rotations,30);
- 		}//end if move2
+	// Moves the Robot again to the top Grid
+	if (objectMove == 3) // on row 3
+	{
+		forward(2.5,rotations,30);
+	}//end if move2
 
- 	  if (objectMove == 4) // on row 4
-   	{
-   		 		forward(3.5,rotations,30);
- 		}//end if move3
+	if (objectMove == 4) // on row 4
+	{
+		forward(3.5,rotations,30);
+	}//end if move3
 
- 		if (objectMove == 5) // on row 5
-   	{
-   		forward(4.5,rotations,30);
- 		}//end if move4
+	if (objectMove == 5) // on row 5
+	{
+		forward(4.5,rotations,30);
+	}//end if move4
 
-  	else
-  	{
-  	 	searching();
-  	}//end else
+	else
+	{
+		searching();
+	}//end else
 
-  //Moves forward half a box so the count can begin at 0
+	//Moves forward half a box so the count can begin at 0
 	forward(1,rotations,30);
 
 	//Searching for oject
 	while(RowCount <7) // wont allow the robot to go any more than 7 rows
-	  {
-			currentDistance = SensorValue[sonar];
-			displayCenteredBigTextLine(3, "Dist: %d", currentDistance);
+	{
+		currentDistance = SensorValue[sonar];
+		displayCenteredBigTextLine(3, "Dist: %d", currentDistance);
 
-			if ((currentDistance) >=100)
-			{
+		if ((currentDistance) >=100)
+		{
 			currentDistance = SensorValue[sonar];
 			displayCenteredBigTextLine(3, "Reading: %d", currentDistance);
-				searching();
-				backward(1,rotations,30);
-				wait1Msec(3000);
-				RowCount ++; //row counter
-			}//end if
-			//if object is detected
-			else
-			{
+			searching();
+			backward(1,rotations,30);
+			wait1Msec(3000);
+			RowCount ++; //row counter
+		}//end if
+		//if object is detected
+		else
+		{
 			currentDistance = SensorValue[sonar];
 			displayCenteredBigTextLine(3, "found!: %d", currentDistance);
-				object();
-				motor[left] = 0;
-				motor[right] = 0;
+			object();
+			motor[left] = 0;
+			motor[right] = 0;
 
-				turnRight(0.74,rotations,50);
-				while(SensorValue(touchSensor)==0)
-				{
-					forward(1,rotations,30);
-					wait1Msec(2000);
-					itemLocateCOL ++;
+			turnRight(0.74,rotations,50);
+			while(SensorValue(touchSensor)==0)
+			{
+				forward(1,rotations,30);
+				wait1Msec(2000);
+				itemLocateCOL ++;
 
-				}//end while
+			}//end while
 
-					object();
-							motor[left] = 0;
-							motor[right] = 0;
-							wait1Msec(3000);
-							part2(itemLocateCOL,RowCount);
+			object();
+			motor[left] = 0;
+			motor[right] = 0;
+			wait1Msec(3000);
+			part2(itemLocateCOL,RowCount);
 
-				//itemLocateCOL = currentDistance / 8; // because the robot is already on Col 1, there are only 8 columns to calculate
-				//itemLocateCOL = itemLocateCOL +1;
+			//itemLocateCOL = currentDistance / 8; // because the robot is already on Col 1, there are only 8 columns to calculate
+			//itemLocateCOL = itemLocateCOL +1;
 			wait1Msec(3000);
 			return 0;
 
@@ -334,34 +334,34 @@ void scanBox(int threshold, int r, int c)
 /*Calculating the automatic threshold for light sensor*/
 int thresHold(int threshold)
 {
-  int light; //stores light value
-  int dark; // stores dark value
-  int total; // stores sum of both
+	int light; //stores light value
+	int dark; // stores dark value
+	int total; // stores sum of both
 
- while(SensorValue(touchSensor) == 0)
- {
-   displayBigTextLine(3, "read light value");
- }//end while
+	while(SensorValue(touchSensor) == 0)
+	{
+		displayBigTextLine(3, "read light value");
+	}//end while
 
- //reading light value
- light = SensorValue(lightSensor);
- displayBigTextLine(3, "Light=%d",light);
- wait1Msec(1000); // wait so you can press again
+	//reading light value
+	light = SensorValue(lightSensor);
+	displayBigTextLine(3, "Light=%d",light);
+	wait1Msec(1000); // wait so you can press again
 
- while(SensorValue(touchSensor) == 0)
- {
-    displayBigTextLine(3, "read dark value");
- }//end while
- //reading dark value
+	while(SensorValue(touchSensor) == 0)
+	{
+		displayBigTextLine(3, "read dark value");
+	}//end while
+	//reading dark value
 
- dark = SensorValue(lightSensor);
- displayBigTextLine(3, "Dark = %d",dark);
- wait1Msec(1000); // wait so you can press again
+	dark = SensorValue(lightSensor);
+	displayBigTextLine(3, "Dark = %d",dark);
+	wait1Msec(1000); // wait so you can press again
 
- //calculating the threshold
- total = light + dark;
- threshold = total / 2;
- return(threshold);
+	//calculating the threshold
+	total = light + dark;
+	threshold = total / 2;
+	return(threshold);
 }//end threshold
 
 //oddTurn() is based on the odd numbered Rows. and does a specific behaviour of turns
@@ -378,10 +378,10 @@ int oddTurn(int turn,int row, int threshold)
 	//This line stops the robot from making a turn at the very last line. This is so it can return to the starting position.
 	if(lineCount == 4)
 	{
-				clearTimer(T1);
-	  while(time1[T1] <= move9)
-	  {
-	  	displayBigTextLine(3, "row %d \nCol%d",r,c);
+		clearTimer(T1);
+		while(time1[T1] <= move9)
+		{
+			displayBigTextLine(3, "row %d \nCol%d",r,c);
 			setMotorSyncTime(left, right, 0, 1000, POWER1);
 			detect(); // sound file
 			boxTotal ++;
@@ -398,11 +398,11 @@ int oddTurn(int turn,int row, int threshold)
 
 	else{
 		clearTimer(T1);
-	  while(time1[T1] <= move9)
-	  {
-	  	displayBigTextLine(3, "row %d \nCol%d",r,c);
+		while(time1[T1] <= move9)
+		{
+			displayBigTextLine(3, "row %d \nCol%d",r,c);
 
-		  // setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
+			// setMotorSyncEncoder(nMotorOne, nMotorTwo, nTurnRatio, nEncoderCount, nSignedPower);
 			setMotorSyncTime(left, right, 0, 1000, POWER1);
 			detect(); // sound file
 			boxTotal ++;
@@ -416,9 +416,9 @@ int oddTurn(int turn,int row, int threshold)
 
 		//THE EXTRA ONE FORWARD!!!!
 		clearTimer(T1);
-	  while(time1[T1] <= move1)
-	  {
-		setMotorSyncTime(left, right, 0, 1000, POWER1);
+		while(time1[T1] <= move1)
+		{
+			setMotorSyncTime(left, right, 0, 1000, POWER1);
 		}//end while
 
 		// turns the robot left for over half a second. This makes it go left (all power to right)
@@ -427,19 +427,19 @@ int oddTurn(int turn,int row, int threshold)
 
 		//straight forward for 1 seconds
 		clearTimer(T1);
-	  while(time1[T1] <= move1)
-	  {
-		setMotorSyncTime(right, left, 0, 1000, POWER1);
-		r++;
-		row++; // increments a row at each row change
+		while(time1[T1] <= move1)
+		{
+			setMotorSyncTime(right, left, 0, 1000, POWER1);
+			r++;
+			row++; // increments a row at each row change
 		}//end while
 
 		displayBigTextLine(3, "Total Boxes %d",boxTotal);
-	  displayBigTextLine(3, "white Boxes %d",whiteTotal);
+		displayBigTextLine(3, "white Boxes %d",whiteTotal);
 		displayBigTextLine(3, "Black Boxes %d",blackTotal);
 
-	  //Turn to the Left
-	  turnLeft(0.7,rotations,50);
+		//Turn to the Left
+		turnLeft(0.7,rotations,50);
 		sleep(1500);
 
 		return(row);
@@ -455,10 +455,10 @@ int evenTurn(int turn,int row,int threshold)
 	int r,c;
 	r=row+1;
 	c=col +2;
-  while(time1[T1] <= move9)
-  {
-  	displayBigTextLine(3, "row%d ,Col%d",r,c);
-	 	setMotorSyncTime(left, right, 0, 1000, POWER1);
+	while(time1[T1] <= move9)
+	{
+		displayBigTextLine(3, "row%d ,Col%d",r,c);
+		setMotorSyncTime(left, right, 0, 1000, POWER1);
 		detect();
 		boxTotal ++;
 		wait1Msec(1000);
@@ -473,9 +473,9 @@ int evenTurn(int turn,int row,int threshold)
 
 	//THE EXTRA ONE FORWARD!!!!
 	clearTimer(T1);
-  while(time1[T1] <= move1)
-  {
-	setMotorSyncTime(left, right, 0, 1000, POWER1);
+	while(time1[T1] <= move1)
+	{
+		setMotorSyncTime(left, right, 0, 1000, POWER1);
 
 	}//end while
 	//turn right
@@ -484,20 +484,20 @@ int evenTurn(int turn,int row,int threshold)
 
 	//straight forward for 1 seconds
 	clearTimer(T1);
-  while(time1[T1] <= move1)
-  {
-  //displayBigTextLine(3, "row %d \nCol%d",row,col);
-	setMotorSyncTime(left, right, 0, 1000, POWER1);
-	r++;
-	row ++;
+	while(time1[T1] <= move1)
+	{
+		//displayBigTextLine(3, "row %d \nCol%d",row,col);
+		setMotorSyncTime(left, right, 0, 1000, POWER1);
+		r++;
+		row ++;
 
 	}//end while
 	//turn Right
 	turnRight(0.7,rotations,50);
 	sleep(1500);
 
-			return (row);
-			wait1Msec(1000);
+	return (row);
+	wait1Msec(1000);
 }//end evenTurn()
 
 //The following program is for the traverse logic.
@@ -523,9 +523,9 @@ void traverse(int lines,int threshold)
 		}//end if
 
 		else if(lines % 2 == 0)
-			{
+		{
 			evenTurn(right,rowCount,threshold);
-			}//end else
+		}//end else
 		lines ++;
 		rowCount ++;
 	}//end while
@@ -546,42 +546,42 @@ int xspot3(int turn, int flag)
 		turnLeft(0.7,rotations,50);
 		sleep(1500);
 
-		 clearTimer(T1);
+		clearTimer(T1);
 
-        while(time1[T1] <= move05) //move02 move04 move05*********************
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
-            //scan box color to file
+		while(time1[T1] <= move05) //move02 move04 move05*********************
+		{
+			setMotorSyncTime(left, right, 0, 1000, POWER1);
+			//scan box color to file
 
-        }//end while
+		}//end while
 
-  turnLeft(0.7,rotations,50);
-	sleep(1500);
+		turnLeft(0.7,rotations,50);
+		sleep(1500);
 
 	}//end if
 
 
 	if(flag == 1)
 
-    {
-        //turns Right
-    		turnRight(0.7,rotations,50);
-				sleep(1500);
+	{
+		//turns Right
+		turnRight(0.7,rotations,50);
+		sleep(1500);
 
 
-		   //CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
-          //(map1 does not use this return. refere to xspotReturn)
+		//CHANGE OUT THE FOLLOWING VARIABLES DEPENDING ON THE MAP.
+		//(map1 does not use this return. refere to xspotReturn)
 
-        clearTimer(T1);
-        while(time1[T1] <= move1) //move04  move03 move1 **************
-        {
-            setMotorSyncTime(left, right, 0, 1000, POWER1);
+		clearTimer(T1);
+		while(time1[T1] <= move1) //move04  move03 move1 **************
+		{
+			setMotorSyncTime(left, right, 0, 1000, POWER1);
 
-        }//end while *************************IMPORTANT
-        objectMove = 5;
-        return(objectMove); // return 3,4,5 is to be used to make the robot move again to the final position
-       	//to locate the object
-    }//end if
+		}//end while *************************IMPORTANT
+		objectMove = 5;
+		return(objectMove); // return 3,4,5 is to be used to make the robot move again to the final position
+		//to locate the object
+	}//end if
 }//End xspot()
 
 
@@ -591,15 +591,15 @@ task main()
 	int flag = 0;		//used to flag a behaiour
 	int lines = 1;	//line count, starting at 1
 	int value = 0;	//value is used for the threshold
-  int threshold=0; // stores the threshold returned from the function
-  int objectMove=0;//
+	int threshold=0; // stores the threshold returned from the function
+	int objectMove=0;//
 
-  //get threshold from function
-  threshold = thresHold(value);
-  wait1Msec(3000); // to place the robot on the appropriate square
+	//get threshold from function
+	threshold = thresHold(value);
+	wait1Msec(3000); // to place the robot on the appropriate square
 
 	//xspot logic
-  activate(); // says activate when going to xspot
+	activate(); // says activate when going to xspot
 	xspot3(left,flag);
 
 	//traverse function
@@ -616,33 +616,33 @@ task main()
 	part1(objectMove);
 
 	//display answers on LCD
-  displayBigTextLine(3, "Total Boxes %d",boxTotal);
-  wait1Msec(2000);
-  displayBigTextLine(3, "white Boxes %d",whiteTotal);
-  wait1Msec(2000);
-  displayBigTextLine(3, "Black Boxes %d",blackTotal);
-  wait1Msec(2000);
+	displayBigTextLine(3, "Total Boxes %d",boxTotal);
+	wait1Msec(2000);
+	displayBigTextLine(3, "white Boxes %d",whiteTotal);
+	wait1Msec(2000);
+	displayBigTextLine(3, "Black Boxes %d",blackTotal);
+	wait1Msec(2000);
 	cheering(); //end phase 1
 
 	//Logic to move the robot to top grid for scan object
 	while(SensorValue(touchSensor) == 0)
- 	{
-   displayBigTextLine(3, "Place Object.....");
- 	}//end while
+	{
+		displayBigTextLine(3, "Place Object.....");
+	}//end while
 
 	//Logic for locating object here
 	scanObject(objectMove);
 
 	//Lab complete!
 	displayBigTextLine(3, "Object Found!");
-  wait1Msec(2000);
-  displayBigTextLine(3, "R:%d ,C:%d",finalROW,finalCOL);
-  wait1Msec(2000);
-  displayBigTextLine(3, "Total Boxes %d",boxTotal);
-  wait1Msec(2000);
-  displayBigTextLine(3, "white Boxes %d",whiteTotal);
-  wait1Msec(2000);
-  displayBigTextLine(3, "Black Boxes %d",blackTotal);
-  wait1Msec(2000);
+	wait1Msec(2000);
+	displayBigTextLine(3, "R:%d ,C:%d",finalROW,finalCOL);
+	wait1Msec(2000);
+	displayBigTextLine(3, "Total Boxes %d",boxTotal);
+	wait1Msec(2000);
+	displayBigTextLine(3, "white Boxes %d",whiteTotal);
+	wait1Msec(2000);
+	displayBigTextLine(3, "Black Boxes %d",blackTotal);
+	wait1Msec(2000);
 	cheering();
 }//end main
